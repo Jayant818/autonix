@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 
 export enum PLATFORMSUPPORTED {
@@ -16,12 +16,17 @@ export class Credentials {
   @Column()
   title: string;
 
-  @Column()
+  @Column({
+    type: "enum",
+    enum: PLATFORMSUPPORTED,
+  })
   platform: PLATFORMSUPPORTED;
 
-  @Column()
-  userId: User;
+  @ManyToOne(() => User, (user) => user.credentials, { onDelete: "CASCADE" })
+  user: User;
 
-  @Column()
-  key: any;
+  @Column({
+    type: "json",
+  })
+  data: Record<string, any>;
 }

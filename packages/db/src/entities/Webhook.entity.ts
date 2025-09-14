@@ -1,4 +1,5 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Workflow } from "./Workflow.entity";
 
 export enum WEBHOOK_METHODS {
   GET = "GET",
@@ -7,6 +8,7 @@ export enum WEBHOOK_METHODS {
   DELETE = "DELETE",
 }
 
+@Entity()
 export class Webhook {
   @PrimaryGeneratedColumn()
   id: number;
@@ -17,9 +19,14 @@ export class Webhook {
   @Column()
   secret: string;
 
-  @Column()
+  @Column({
+    type: "enum",
+    enum: WEBHOOK_METHODS,
+  })
   method: WEBHOOK_METHODS;
 
-  @Column()
-  workflowId: number;
+  @ManyToOne(() => Workflow, (workflow) => workflow.webhooks, {
+    onDelete: "CASCADE",
+  })
+  workflow: Workflow;
 }

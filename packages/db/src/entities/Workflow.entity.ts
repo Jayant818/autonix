@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import { Execution } from "./Execution.entity";
+import { Webhook } from "./Webhook.entity";
 
 @Entity()
 export class Workflow {
@@ -8,21 +17,36 @@ export class Workflow {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    default: true,
+  })
   enabled: boolean;
 
-  @Column()
-  nodes: JSON;
+  @Column({
+    type: "json",
+  })
+  nodes: Record<string, any>[];
 
-  @Column()
-  connections: JSON;
+  @Column({
+    type: "json",
+  })
+  connections: Record<string, any>;
 
-  @Column()
+  @OneToMany(() => Execution, (execution) => execution.workflow)
+  executions: Execution[];
+
+  @OneToMany(() => Webhook, (webhook) => webhook.workflow)
+  webhooks: Webhook[];
+
+  @Column({
+    nullable: true,
+    default: "",
+  })
   description: string;
 
-  @Column()
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
+  @UpdateDateColumn()
   updatedAt: Date;
 }

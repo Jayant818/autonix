@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import { Workflow } from "./Workflow.entity";
 
 export enum WORKFLOW_STATUS {
   PENDING = "PENDING",
@@ -12,38 +20,33 @@ export class Execution {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  workflowId: number;
+  @ManyToOne(() => Workflow, (workflow) => workflow.executions, {
+    onDelete: "CASCADE",
+  })
+  workflow: Workflow;
 
-  @Column()
+  @Column({
+    type: "enum",
+    enum: WORKFLOW_STATUS,
+    default: WORKFLOW_STATUS.PENDING,
+  })
   status: WORKFLOW_STATUS;
 
-  @Column()
+  @Column({
+    type: "json",
+    nullable: true,
+  })
+  result: Record<string, any>;
+
+  @Column({
+    type: "json",
+    nullable: true,
+  })
+  logs: Record<string, any>[];
+
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  updatedAt: Date;
-
-  @Column()
-  result: JSON; // It will be a JSON
-}
-
-export class TaskLogs {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  ExecutionId: number;
-
-  @Column()
-  taskId: number;
-
-  @Column()
-  log: string[];
-
-  @Column()
-  createdAt: Date;
-
-  @Column()
+  @UpdateDateColumn()
   updatedAt: Date;
 }
