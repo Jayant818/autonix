@@ -7,11 +7,11 @@ export class UserController {
 
   @Post('/signup')
   async SignUpUser() {
-    return this.userService.SignUpUser();
+    // return this.userService.SignUpUser();
   }
 
   @Post('/signin')
   async login() {
-    return this.userService.SignInUser();
+    // return this.userService.SignInUser();
   }
 }

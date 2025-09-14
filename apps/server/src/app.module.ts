@@ -4,7 +4,7 @@ import { WorkflowModule } from './Workflow/workflow.module';
 import { CredentialsModule } from './Credentials/credentials.module';
 
 @Module({
-  imports: [UserModule, WorkflowModule, CredentialsModule],
+  imports: [UserModule, WorkflowModule, CredentialsModule, DBModule],
   controllers: [],
   providers: [],
 })

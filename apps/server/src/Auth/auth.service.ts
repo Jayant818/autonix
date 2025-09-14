@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class UserService {
+export class AuthService {
   constructor() {}
 
-  // async SignUpUser() {}
+  async SignUpUser() {}
 
-  // async SignInUser() {}
+  async SignInUser() {}
 }
