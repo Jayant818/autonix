@@ -33,13 +33,13 @@ export class Execution {
   status: WORKFLOW_STATUS;
 
   @Column({
-    type: "number",
+    type: "int",
     nullable: false,
   })
   totalTasks: number;
 
   @Column({
-    type: "number",
+    type: "int",
     nullable: false,
     default: 0,
   })
