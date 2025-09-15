@@ -17,13 +17,19 @@ export class Webhook {
   title: string;
 
   @Column()
-  secret: string;
+  secret?: string;
 
   @Column({
     type: "enum",
     enum: WEBHOOK_METHODS,
   })
   method: WEBHOOK_METHODS;
+
+  @Column({
+    unique: true,
+    nullable: false,
+  })
+  endpoint: string;
 
   @ManyToOne(() => Workflow, (workflow) => workflow.webhooks, {
     onDelete: "CASCADE",

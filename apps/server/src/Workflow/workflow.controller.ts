@@ -1,12 +1,19 @@
-import { Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+} from '@nestjs/common';
 import { WorkflowService } from './workflow.service';
+import { createWorkflowDTO } from './DTO/create-workflow.dto';
 
 @Controller('/api/v1/workflow')
 export class WorkflowController {
-  constructor(
-    private readonly workflowService: WorkflowService,
-    s,
-  ) {}
+  constructor(private readonly workflowService: WorkflowService) {}
 
   @Get()
   async getWorkflows() {
@@ -14,18 +21,33 @@ export class WorkflowController {
     return workflow;
   }
 
-  @Get('/id')
+  @Get('/:id')
   async getWorkflowById(@Param('id') id: string) {
     return this.workflowService.getWorkflowsById(id);
   }
 
-  @Post()
-  async createWorkflow() {
-    return this.workflowService.createWorkflow();
+  @Post('/manual/:id')
+  async triggerManualWorkflow(@Param('id') id: string) {
+    // Logic to trigger the workflow manually
+    return this.workflowService.runWorkflowById(id);
   }
 
-  @Put('/id')
+  /*
+   * When creating workflow, we will save all the nodes and the webhooks associated with it.
+   */
+  @Post()
+  async createWorkflow(@Req() req, @Body() body: createWorkflowDTO) {
+    const { id } = req.user;
+    return this.workflowService.createWorkflow({ userId: id, body });
+  }
+
+  @Put('/:id')
   async updateWorkflowById(@Param('id') id: string) {
     return this.workflowService.updateWorkflowById(id);
+  }
+
+  @Delete('/:id')
+  async deleteWorkflowById(@Param('id') id: string) {
+    return this.workflowService.deleteWorkflowById(id);
   }
 }

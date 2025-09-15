@@ -1,17 +1,17 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Post, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 
 @Controller('/api/v1/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('/signup')
-  async SignUpUser() {
-    // return this.userService.SignUpUser();
-  }
+  @Get('/me')
+  async getProfile(@Req() req) {
+    const { id } = req.user;
 
-  @Post('/signin')
-  async login() {
-    // return this.userService.SignInUser();
+    if (!id) {
+      throw new Error('User ID not logged in');
+    }
+    return this.userService.getProfile(id);
   }
 }

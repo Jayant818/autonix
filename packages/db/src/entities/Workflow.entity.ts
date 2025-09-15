@@ -9,6 +9,12 @@ import {
 import { Execution } from "./Execution.entity";
 import { Webhook } from "./Webhook.entity";
 
+export enum TriggerType {
+  Webhook = "webhook",
+  Manual = "manual",
+  Cron = "cron",
+}
+
 @Entity()
 export class Workflow {
   @PrimaryGeneratedColumn()
@@ -21,6 +27,12 @@ export class Workflow {
     default: true,
   })
   enabled: boolean;
+
+  @Column({
+    type: "enum",
+    enum: TriggerType,
+  })
+  trigger: TriggerType;
 
   @Column({
     type: "json",

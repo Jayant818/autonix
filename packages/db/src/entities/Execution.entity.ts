@@ -33,6 +33,19 @@ export class Execution {
   status: WORKFLOW_STATUS;
 
   @Column({
+    type: "number",
+    nullable: false,
+  })
+  totalTasks: number;
+
+  @Column({
+    type: "number",
+    nullable: false,
+    default: 0,
+  })
+  completedTasks: number;
+
+  @Column({
     type: "json",
     nullable: true,
   })
